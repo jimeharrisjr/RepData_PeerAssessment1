@@ -7,6 +7,8 @@ output:
 
 
 ## Loading and preprocessing the data
+Use the readr package to read the zip file directory and make a copy which contains only rows without
+missing values
 
 
 ```r
@@ -51,6 +53,8 @@ dfnoNA<-df[!is.na(df$steps),]
 
 
 ## What is mean total number of steps taken per day?
+Take the non-NA rows, group them by date, then output the sum per interval
+Create a histogram of the number of steps, and then output the mean and median steps per day.
 
 
 ```r
@@ -85,6 +89,9 @@ sprintf('Median number of steps per day: %f',median(s$steps))
 
 
 ## What is the average daily activity pattern?
+Group the non-NA frame by interval, and then get the mean steps per interval.
+Use the base plotting system to plot the result, and mark the interval with the maximum with an abline.
+Finally, output the interval at which the maximum number of steps are taken on average.
 
 
 ```r
@@ -98,15 +105,23 @@ text(850,200, paste('Max @ interval',as.character(s2$interval[which.max(s2$steps
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 ```r
-sprintf('Max steps taken on average at interval %i',s2$interval[which.max(s2$steps)])
+sprintf('Maximum steps were taken on average at interval %i',s2$interval[which.max(s2$steps)])
 ```
 
 ```
-## [1] "Max steps taken on average at interval 835"
+## [1] "Maximum steps were taken on average at interval 835"
 ```
 
 
 ## Imputing missing values
+Output the number of NA rows from the original set.
+Take the non-NA frame, group it by interval, and then get the mean by interval. Merge that with the 
+columns from the original data where steps were NA, such that the NA is replaced by the mean for that interval.
+Recombine the two frames and order them (just to be neat)
+
+Take the resulting data frame with the imputed values, and plot a histogram of the steps per interval.
+
+Finally, output the median and mean of the imputed values, and show the delta between them and the previous set where the NAs were simply removed.
 
 
 ```r
@@ -162,6 +177,12 @@ sprintf('Difference Median number of steps per day: %f',(median(s3$steps)-median
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+Create a factor variable of two factors - weekday and weekend.
+Make a function that returns whichever factor is appropriate based on the date using the weekend() function.
+Then group the resulting data frame by day type and interval, and compute the average for each interval per day type.
+
+Use ggplot to plot the two graphs in a single column to show how they differ.
+
 
 ```r
 # using the imputed values
